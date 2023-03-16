@@ -17,19 +17,22 @@ data class Point(
 ) : Draw {
 
     /**
-     * @param d the distance from the edge of the map
+     * @param distanceForGameMap the distance from the edge of the map
      * @return true if the point is out of the map
      */
-    fun isBroken(d: Double = 0.0) = (x < d) || (x > GAME_MAP_X - d) || (y < d) || (y > GAME_MAP_Y - d)
+    fun isBroken(distanceForGameMap: Double = 0.0) = (x < distanceForGameMap)
+            || (x > GAME_MAP_X - distanceForGameMap)
+            || (y < distanceForGameMap)
+            || (y > GAME_MAP_Y - distanceForGameMap)
 
     /**
      * 通过方向获取目的地的点
      *
-     * @param direction 目的地的方向
+     * @param angle 目的地的方向
      * @return 目的地的点
      */
-    fun target(direction: Double): Point {
-        val rad = Math.toRadians(direction % 360)
+    fun getTarget(angle: Double): Point {
+        val rad = Math.toRadians(angle % 360)
         val newX = x + cos(rad) * GAME_MOVE_DISTANCE
         val newY = y + sin(rad) * GAME_MOVE_DISTANCE
         return Point(newX, newY)
@@ -69,7 +72,7 @@ data class Point(
      * 绘制一个圆
      * @param g 画笔
      * @param color 颜色
-     * @param powerForRadius 与正常DRAW_RADIUS的倍数
+     * @param powerForRadius 与正常DRAW_RADIUS的倍数 默认为1,0
      */
     fun onDraw(g: Graphics, powerForRadius: Double = 1.0, color: Color? = null) {
         g.color = color

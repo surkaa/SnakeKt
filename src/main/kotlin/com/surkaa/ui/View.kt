@@ -7,14 +7,20 @@ import java.awt.Dimension
 import java.awt.Graphics
 import javax.swing.JPanel
 
+/**
+ * @author kaa
+ */
 class View : JPanel() {
+
     private val manager: Manager = Manager.getInstance()
 
     init {
+        // 监听鼠标运动
         addMouseListener(manager)
         addMouseMotionListener(manager)
     }
 
+    // 绘画
     override fun paint(g: Graphics?) {
         super.paint(g)
         g?.let {
@@ -26,6 +32,7 @@ class View : JPanel() {
         }
     }
 
+    // 窗口大小
     override fun getPreferredSize() = Dimension(
         Point.DRAW_SIZE_X,
         Point.DRAW_SIZE_Y

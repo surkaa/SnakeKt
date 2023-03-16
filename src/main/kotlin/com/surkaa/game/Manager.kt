@@ -10,19 +10,23 @@ import kotlin.system.exitProcess
 
 class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
 
+    // 游戏每帧的睡眠时间(ms)
     private var sleepTime: Long = 100L
+    // 是否处于暂停状态
     private var isPause: Boolean = false
-    private var canHitSelf: Boolean = false
+    // 能否撞到自身
+    private var canHitSelf: Boolean = true
 
+    // 存储所有蛇 食物
     private val snakes: MutableList<Snake> = mutableListOf()
     private val foods: MutableList<Food> = mutableListOf()
+
+    // 仅有一条蛇的时候将某些交互事件传递到此蛇
     private val mainSnake
         get() = if (snakes.size == 1) snakes.first() else null
 
     //<editor-fold desc="RunListener">
-    /**
-     * 储存监听器
-     */
+    // 储存监听器
     private val runListeners: MutableList<RunListener> = mutableListOf()
 
     /**
@@ -33,29 +37,26 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
         fun afterRun()
     }
 
-    fun addRunListener(runListener: RunListener) {
-        runListeners.add(runListener)
-    }
+    fun addRunListener(runListener: RunListener) = runListeners.add(runListener)
 
-    fun removeRunListener(runListener: RunListener) {
-        runListeners.remove(runListener)
-    }
+    fun removeRunListener(runListener: RunListener) = runListeners.remove(runListener)
 
-    fun clearRunListener() {
-        runListeners.clear()
-    }
+    fun clearRunListener() = runListeners.clear()
     //</editor-fold>
 
     //<editor-fold desc="Game Controller (暂停继续)">
+    // 开启游戏
     fun start() {
         isPause = false
         Thread(runnable).start()
     }
 
+    // 暂停游戏
     fun pause() {
         isPause = true
     }
 
+    // 开启游戏(或者说是继续游戏)用的Runnable接口
     private val runnable = Runnable {
         while (!isPause) {
             run()
@@ -71,16 +72,19 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
         Thread.sleep(sleepTime)
     }
 
+    // 走一边这条蛇 // TODO 值得优化, 开线程跑多条蛇
     private fun runOne(snake: Snake) {
         if (!snake.isAlive) return
         when (val result = getResult(snake)) {
-            is Result.Move -> snake.onMove()
+            is Result.Move -> onMove(snake)
             is Result.Eat -> onEat(snake, result.food)
             is Result.HitSelf -> onDie(snake)
             is Result.HitWall -> onDie(snake)
             is Result.HitOther -> onDie(snake)
         }
     }
+
+    private fun onMove(snake: Snake) = snake.onMove()
 
     private fun onDie(snake: Snake) = snake.die()
 
@@ -90,6 +94,9 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
         foods.add(Food.random())
     }
 
+    /**
+     * 获取Result
+     */
     private fun getResult(snake: Snake): Result {
         val next = snake.nextTarget
 
@@ -97,6 +104,7 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
         if (next.isBroken())
             return Result.HitWall
 
+        // 比较器
         val predicateSelf: (Point) -> Boolean = { p -> p.isNear(next) }
 
         // 根据canHitSelf检查是否撞到自身
@@ -123,6 +131,12 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
     //</editor-fold>
 
     //<editor-fold desc="KeyListener & MouseListener">
+    // TODO 加速减速只能所有蛇都加速减速
+    /**
+     * 监听键盘, 使游戏加速或减速
+     * esc结束程序
+     * space暂停或继续游戏
+     */
     override fun keyPressed(e: KeyEvent?) {
         if (e == null) return
         when (e.keyCode) {
@@ -132,12 +146,14 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
                 if (isPause) start()
                 else pause()
             }
-
             KeyEvent.VK_ESCAPE -> exitProcess(0)
             else -> mainSnake?.keyPressed(e)
         }
     }
 
+    /**
+     * 监听键盘, 恢复每帧睡眠时间
+     */
     override fun keyReleased(e: KeyEvent?) {
         if (e == null) return
         when (e.keyCode) {
@@ -148,11 +164,17 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
     override fun keyTyped(e: KeyEvent?) {
     }
 
+    /**
+     * 监听鼠标 若只有一条蛇就将鼠标事件传递给这条蛇
+     */
     override fun mouseDragged(e: MouseEvent?) {
         if (e == null) return
         mainSnake?.mouseDragged(e)
     }
 
+    /**
+     * 监听鼠标 若只有一条蛇就将鼠标事件传递给这条蛇
+     */
     override fun mousePressed(e: MouseEvent?) {
         if (e == null) return
         mainSnake?.mousePressed(e)

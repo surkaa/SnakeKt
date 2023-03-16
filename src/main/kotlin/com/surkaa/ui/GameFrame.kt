@@ -2,7 +2,9 @@ package com.surkaa.ui
 
 import com.surkaa.game.Manager
 import javax.swing.JFrame
-
+/**
+ * @author kaa
+ */
 class GameFrame(title: String) : JFrame(title) {
 
     private val manager: Manager = Manager.getInstance()
@@ -34,6 +36,7 @@ class GameFrame(title: String) : JFrame(title) {
         })
     }
 
+    // 默认开局
     fun defaultGame() = manager.defaultStart()
 
 }
