@@ -11,7 +11,11 @@ import kotlin.system.exitProcess
 class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
 
     // 游戏每帧的睡眠时间(ms)
-    private var sleepTime: Long = 100L
+    private val sleepTimeGeneral = 80L
+    private val sleepTimeFast = 40L
+    private val sleepTimeSlow = 160L
+    private var sleepTime: Long = sleepTimeGeneral
+
     // 是否处于暂停状态
     private var isPause: Boolean = false
     // 能否撞到自身
@@ -140,8 +144,8 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
     override fun keyPressed(e: KeyEvent?) {
         if (e == null) return
         when (e.keyCode) {
-            KeyEvent.VK_CONTROL, KeyEvent.VK_DOWN -> sleepTime = 150
-            KeyEvent.VK_SHIFT, KeyEvent.VK_UP -> sleepTime = 10
+            KeyEvent.VK_CONTROL, KeyEvent.VK_DOWN -> sleepTime = sleepTimeSlow
+            KeyEvent.VK_SHIFT, KeyEvent.VK_UP -> sleepTime = sleepTimeFast
             KeyEvent.VK_SPACE -> {
                 if (isPause) start()
                 else pause()
@@ -157,7 +161,10 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
     override fun keyReleased(e: KeyEvent?) {
         if (e == null) return
         when (e.keyCode) {
-            KeyEvent.VK_SHIFT, KeyEvent.VK_CONTROL, KeyEvent.VK_UP, KeyEvent.VK_DOWN -> sleepTime = 50
+            KeyEvent.VK_SHIFT,
+            KeyEvent.VK_CONTROL,
+            KeyEvent.VK_UP,
+            KeyEvent.VK_DOWN -> sleepTime = sleepTimeGeneral
         }
     }
 
