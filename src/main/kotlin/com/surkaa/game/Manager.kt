@@ -34,7 +34,7 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
 
     //<editor-fold desc="RunListener">
     // 储存监听器
-    private val runListeners: MutableList<RunListener> = mutableListOf()
+    private var runListener: RunListener? = null
 
     /**
      * 用于运行前监听
@@ -44,11 +44,9 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
         fun afterRun()
     }
 
-    fun addRunListener(runListener: RunListener) = runListeners.add(runListener)
-
-    fun removeRunListener(runListener: RunListener) = runListeners.remove(runListener)
-
-    fun clearRunListener() = runListeners.clear()
+    fun setRunListener(runListener: RunListener) {
+        this.runListener = runListener
+    }
     //</editor-fold>
 
     //<editor-fold desc="Game Controller (暂停继续)">
@@ -73,13 +71,13 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
 
     //<editor-fold desc="Run (CPU)">
     private fun run() {
-        runListeners.forEach { it.beforeRun() }
+        runListener?.beforeRun()
         snakes.forEach {
             // 跳过死了的蛇 return@forEach相当于continue
             if (!it.isAlive) return@forEach
             it.run()
         }
-        runListeners.forEach { it.afterRun() }
+        runListener?.afterRun()
         Thread.sleep(sleepTime)
     }
 
