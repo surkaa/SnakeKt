@@ -19,11 +19,11 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
     // 是否处于暂停状态
     private var isPause: Boolean = false
     // 能否撞到自身
-    private var canHitSelf: Boolean = true
+    var canHitSelf: Boolean = true
 
     // 存储所有蛇 食物
-    private val snakes: MutableList<Snake> = mutableListOf()
-    private val foods: MutableList<Food> = mutableListOf()
+    val snakes: MutableList<Snake> = mutableListOf()
+    val foods: MutableList<Food> = mutableListOf()
 
     // 仅有一条蛇的时候将某些交互事件传递到此蛇
     private val mainSnake
@@ -71,66 +71,18 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
     //<editor-fold desc="Run (CPU)">
     private fun run() {
         runListeners.forEach { it.beforeRun() }
-        snakes.forEach { runOne(it) }
+        snakes.forEach {
+            // 跳过死了的蛇 return@forEach相当于continue
+            if (!it.isAlive) return@forEach
+            it.run()
+        }
         runListeners.forEach { it.afterRun() }
         Thread.sleep(sleepTime)
     }
 
-    // 走一边这条蛇 // TODO 值得优化, 开线程跑多条蛇
-    private fun runOne(snake: Snake) {
-        if (!snake.isAlive) return
-        when (val result = getResult(snake)) {
-            is Result.Move -> onMove(snake)
-            is Result.Eat -> onEat(snake, result.food)
-            is Result.HitSelf -> onDie(snake)
-            is Result.HitWall -> onDie(snake)
-            is Result.HitOther -> onDie(snake)
-        }
-    }
-
-    private fun onMove(snake: Snake) = snake.onMove()
-
-    private fun onDie(snake: Snake) = snake.die()
-
-    private fun onEat(snake: Snake, food: Food) {
-        snake.onEat()
+    fun onEat(food: Food) {
         foods.remove(food)
         foods.add(Food.random())
-    }
-
-    /**
-     * 获取Result
-     */
-    private fun getResult(snake: Snake): Result {
-        val next = snake.nextTarget
-
-        // 检查是否撞到边界
-        if (next.isBroken())
-            return Result.HitWall
-
-        // 比较器
-        val predicateSelf: (Point) -> Boolean = { p -> p.isNear(next) }
-
-        // 根据canHitSelf检查是否撞到自身
-        if (!canHitSelf && snake.tail.any(predicateSelf))
-            return Result.HitSelf
-
-        // 检查是否撞到其他蛇
-        snakes.forEach { other ->
-            // 排除自身
-            if (other != snake) {
-                if (other.head.isNear(next) || other.tail.any(predicateSelf))
-                    return Result.HitOther(other)
-            }
-        }
-
-        // 检查能否吃到食物
-        foods.forEach { food ->
-            if (food.isNear(next))
-                return Result.Eat(food)
-        }
-
-        return Result.Move
     }
     //</editor-fold>
 

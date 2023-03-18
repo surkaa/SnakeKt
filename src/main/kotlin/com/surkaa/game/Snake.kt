@@ -9,11 +9,11 @@ import java.awt.event.MouseEvent
 /**
  * @author kaa
  */
-class Snake(
+open class Snake(
     // 蛇的头部
     var head: Point,
     // 蛇的方向
-    var angle: Double = 0.0,
+    private var angle: Double = 0.0,
     // 蛇的尾巴 除了头 都是尾巴 tail 0 => ... => size-1 head
     var tail: MutableList<Point> = mutableListOf(),
     private val headColor: Color = Color.BLACK,
@@ -29,7 +29,7 @@ class Snake(
     /**
      * 当下一个位置空旷时被调用
      */
-    fun onMove() {
+    private fun move() {
         val newHead: Point = nextTarget
         tail.add(head)
         head = newHead
@@ -39,7 +39,7 @@ class Snake(
     /**
      * 当下一个位置与食物足够靠进的时被调用
      */
-    fun onEat() {
+    private fun eat() {
         val newHead: Point = head.getTarget(angle)
         tail.add(head)
         head = newHead
@@ -52,8 +52,76 @@ class Snake(
         }
     }
 
-    fun die() {
+    private fun die() {
         isAlive = false
+    }
+
+    private fun isHitOther(other: Snake): Boolean {
+        if (head.isNear(other.head))
+            return true
+        other.tail.forEach {
+            if (it.isNear(head))
+                return true
+        }
+        return false
+    }
+
+    fun run() {
+        // turn返回非空时扭转方向
+        turn()?.let {
+            angle = it
+        }
+        val manager = Manager.getInstance()
+        when (val result = getResult(manager)) {
+            is Result.Eat -> {
+                // TODO 开启多线程后可能造成ConcurrentModificationException
+                manager.onEat(result.food)
+                eat()
+            }
+            // TODO 可以通过result.snake给被撞的蛇加分
+            is Result.HitOther, Result.HitSelf, Result.HitWall -> die()
+            Result.Move -> move()
+        }
+    }
+
+    /**
+     * 让蛇必要时自己走
+     */
+    open fun turn(): Double? = null
+
+    /**
+     * 获取Result
+     */
+    private fun getResult(manager: Manager): Result {
+        val next = nextTarget
+
+        // 检查是否撞到边界
+        if (next.isBroken())
+            return Result.HitWall
+
+        // 比较器
+        val predicateSelf: (Point) -> Boolean = { p -> p.isNear(next) }
+
+        manager.let {
+
+            // 根据canHitSelf检查是否撞到自身
+            if (!it.canHitSelf && tail.any(predicateSelf))
+                return Result.HitSelf
+
+            // 检查是否撞到其他蛇
+            it.snakes.forEach { other ->
+                // 排除自身
+                if (other != this@Snake && isHitOther(other))
+                    return Result.HitOther(other)
+            }
+
+            // 检查能否吃到食物
+            it.foods.forEach { food ->
+                if (food.isNear(next))
+                    return Result.Eat(food)
+            }
+        }
+        return Result.Move
     }
 
     //<editor-fold desc="KeyListener & MouseListener">
