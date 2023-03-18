@@ -22,7 +22,7 @@ open class Snake(
     var isAlive: Boolean = true
         private set
 
-    private val nextTarget get() = head.getTarget(angle)
+    val nextTarget get() = head.getTarget(angle)
 
     /**
      * 当下一个位置空旷时被调用
@@ -44,9 +44,13 @@ open class Snake(
     }
 
     override fun onDraw(g: Graphics) {
-        head.onDraw(g, color = headColor)
-        for (point in tail) {
-            point.onDraw(g, color = tailColor)
+        try {
+            head.onDraw(g, color = headColor)
+            for (point in tail) {
+                point.onDraw(g, color = tailColor)
+            }
+        } catch (_: ConcurrentModificationException) {
+
         }
     }
 
