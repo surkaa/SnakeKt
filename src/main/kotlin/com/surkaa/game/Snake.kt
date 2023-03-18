@@ -3,8 +3,6 @@ package com.surkaa.game
 import com.surkaa.ui.Draw
 import java.awt.Color
 import java.awt.Graphics
-import java.awt.event.KeyEvent
-import java.awt.event.MouseEvent
 
 /**
  * @author kaa
@@ -24,7 +22,7 @@ open class Snake(
     var isAlive: Boolean = true
         private set
 
-    val nextTarget get() = head.getTarget(angle)
+    private val nextTarget get() = head.getTarget(angle)
 
     /**
      * 当下一个位置空旷时被调用
@@ -122,36 +120,6 @@ open class Snake(
             }
         }
         return Result.Move
-    }
-
-    //<editor-fold desc="KeyListener & MouseListener">
-    fun mouseDragged(e: MouseEvent) = targetMouse(e)
-
-    fun mousePressed(e: MouseEvent) = targetMouse(e)
-
-    /**
-     * 让蛇往鼠标点击的位置走
-     */
-    private fun targetMouse(e: MouseEvent) {
-        val targetPoint = Point(
-            e.x / Point.MULTIPLE.toDouble(),
-            e.y / Point.MULTIPLE.toDouble()
-        )
-        val newAngle = head.getAngle(targetPoint)
-        angle = newAngle
-    }
-
-    /**
-     * 监听按键修改蛇的方向
-     */
-    fun keyPressed(e: KeyEvent) = when (e.keyCode) {
-        KeyEvent.VK_W -> angle = 270.0
-        KeyEvent.VK_S -> angle = 90.0
-        KeyEvent.VK_A -> angle = 180.0
-        KeyEvent.VK_D -> angle = 0.0
-        KeyEvent.VK_LEFT -> angle -= 10.0
-        KeyEvent.VK_RIGHT -> angle += 10.0
-        else -> {}
     }
     //</editor-fold>
 

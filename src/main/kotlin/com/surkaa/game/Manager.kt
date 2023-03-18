@@ -1,5 +1,6 @@
 package com.surkaa.game
 
+import com.surkaa.snake.PlayerSnake
 import com.surkaa.ui.Draw
 import java.awt.Graphics
 import java.awt.event.KeyEvent
@@ -12,7 +13,7 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
 
     // 游戏每帧的睡眠时间(ms)
     private val sleepTimeGeneral = 80L
-    private val sleepTimeFast = 40L
+    private val sleepTimeFast = 8L
     private val sleepTimeSlow = 160L
     private var sleepTime: Long = sleepTimeGeneral
 
@@ -26,8 +27,10 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
     val foods: MutableList<Food> = mutableListOf()
 
     // 仅有一条蛇的时候将某些交互事件传递到此蛇
-    private val mainSnake
-        get() = if (snakes.size == 1) snakes.first() else null
+    private val mainSnake : PlayerSnake?
+        get() = snakes.firstOrNull {
+            it is PlayerSnake
+        } as PlayerSnake?
 
     //<editor-fold desc="RunListener">
     // 储存监听器
@@ -156,7 +159,7 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
             tail.add(0, Point(x - dx * it, y))
         }
         snakes.add(
-            Snake(
+            PlayerSnake(
                 head = Point(x, y),
                 angle = 0.0,
                 tail = tail
