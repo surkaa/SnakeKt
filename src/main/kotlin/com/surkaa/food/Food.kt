@@ -1,5 +1,6 @@
-package com.surkaa.game
+package com.surkaa.food
 
+import com.surkaa.game.Point
 import com.surkaa.ui.Draw
 import java.awt.Color
 import java.awt.Graphics
@@ -37,18 +38,3 @@ sealed class Food(
         fun random() = listOf(Pitaya(), Banana(), Grape()).random()
     }
 }
-
-// 火龙果
-class Pitaya(
-    point: Point = Point.random()
-) : Food(point = point, value = 3, color = Color.RED)
-
-// 香蕉
-class Banana(
-    point: Point = Point.random()
-) : Food(point = point, value = 2, color = Color.YELLOW)
-
-// 葡萄
-class Grape(
-    point: Point = Point.random()
-) : Food(point = point, value = 1, color = Color.GREEN)

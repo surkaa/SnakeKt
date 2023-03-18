@@ -1,5 +1,6 @@
 package com.surkaa.game
 
+import com.surkaa.food.Food
 import com.surkaa.snake.DontHitWallSnake
 import com.surkaa.snake.PlayerSnake
 import com.surkaa.snake.ToFoodSnake

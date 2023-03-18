@@ -9,8 +9,8 @@ open class DontHitWallSnake(
     head: Point,
     angle: Double = 0.0,
     tail: MutableList<Point> = mutableListOf(),
-    headColor: Color = Color.BLACK,
-    tailColor: Color = Color.GRAY
+    headColor: Color = Color(0X582A16),
+    tailColor: Color = Color(0XB98458)
 ) : Snake(head, angle, tail, headColor, tailColor) {
 
     override fun turn(): Double? {

@@ -14,8 +14,8 @@ open class Snake(
     private var angle: Double = 0.0,
     // 蛇的尾巴 除了头 都是尾巴 tail 0 => ... => size-1 head
     var tail: MutableList<Point> = mutableListOf(),
-    private val headColor: Color = Color.BLACK,
-    private val tailColor: Color = Color.GRAY
+    private val headColor: Color = Color(0XFBE816),
+    private val tailColor: Color = Color(0X55C762)
 ) : Draw {
 
     // 是否存活 私有化setter
@@ -44,13 +44,9 @@ open class Snake(
     }
 
     override fun onDraw(g: Graphics) {
-        try {
-            head.onDraw(g, color = headColor)
-            for (point in tail) {
-                point.onDraw(g, color = tailColor)
-            }
-        } catch (_: ConcurrentModificationException) {
-
+        head.onDraw(g, color = headColor)
+        for (point in tail) {
+            point.onDraw(g, color = tailColor)
         }
     }
 
@@ -58,6 +54,7 @@ open class Snake(
         isAlive = false
     }
 
+    //<editor-fold desc="run">
     private fun isHitOther(other: Snake): Boolean {
         if (head.isNear(other.head))
             return true

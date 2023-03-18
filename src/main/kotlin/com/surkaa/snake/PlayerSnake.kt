@@ -8,13 +8,16 @@ class PlayerSnake(
     head: Point,
     angle: Double = 0.0,
     tail: MutableList<Point> = mutableListOf(),
-    headColor: Color = Color.BLACK,
-    tailColor: Color = Color.GRAY
+    headColor: Color = Color(0X326594),
+    tailColor: Color = Color(0X93D8F1)
 ) : DontHitWallSnake(head, angle, tail, headColor, tailColor),
     KeyListener,
     MouseListener,
     MouseMotionListener {
 
+    /**
+     * 下一步的方向
+     */
     private var nextAngle: Double? = null
 
     /**
@@ -35,7 +38,9 @@ class PlayerSnake(
         nextAngle = newAngle
     }
 
-    override fun keyTyped(e: KeyEvent?) {}
+    override fun mouseDragged(e: MouseEvent?) = targetMouse(e)
+
+    override fun mousePressed(e: MouseEvent?) = targetMouse(e)
 
     /**
      * 监听按键修改蛇的方向
@@ -50,19 +55,17 @@ class PlayerSnake(
         else -> {}
     }
 
+    override fun keyTyped(e: KeyEvent?) {}
+
     override fun keyReleased(e: KeyEvent?) {}
 
     override fun mouseClicked(e: MouseEvent?) {}
-
-    override fun mousePressed(e: MouseEvent?) = targetMouse(e)
 
     override fun mouseReleased(e: MouseEvent?) {}
 
     override fun mouseEntered(e: MouseEvent?) {}
 
     override fun mouseExited(e: MouseEvent?) {}
-
-    override fun mouseDragged(e: MouseEvent?) = targetMouse(e)
 
     override fun mouseMoved(e: MouseEvent?) {}
 }

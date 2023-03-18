@@ -8,8 +8,8 @@ class ToFoodSnake(
     head: Point,
     angle: Double = 0.0,
     tail: MutableList<Point> = mutableListOf(),
-    headColor: Color = Color.BLACK,
-    tailColor: Color = Color.GRAY
+    headColor: Color = Color(0X5868A1),
+    tailColor: Color = Color(0X737FB4)
 ) : DontHitWallSnake(head, angle, tail, headColor, tailColor) {
 
     override fun turn() = super.turn() ?: head.getAngle(getFood.point)

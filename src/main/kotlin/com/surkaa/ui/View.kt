@@ -28,7 +28,11 @@ class View : JPanel() {
             g.color = Color.LIGHT_GRAY
             g.fillRect(0, 0, Point.DRAW_SIZE_X, Point.DRAW_SIZE_Y)
             // 画主体
-            manager.onDraw(g)
+            try {
+                manager.onDraw(g)
+            } catch (_: ConcurrentModificationException) {
+
+            }
         }
     }
 

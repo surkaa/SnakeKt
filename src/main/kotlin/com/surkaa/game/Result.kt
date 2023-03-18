@@ -1,5 +1,7 @@
 package com.surkaa.game
 
+import com.surkaa.food.Food
+
 /**
  * 用于判定蛇每走一步的结果, 并存储一些数据
  * @author kaa
