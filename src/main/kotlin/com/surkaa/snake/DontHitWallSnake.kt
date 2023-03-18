@@ -5,7 +5,7 @@ import com.surkaa.game.Snake
 import java.awt.Color
 import kotlin.random.Random
 
-open class SmartSnake(
+open class DontHitWallSnake(
     head: Point,
     angle: Double = 0.0,
     tail: MutableList<Point> = mutableListOf(),

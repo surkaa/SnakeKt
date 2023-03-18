@@ -26,7 +26,7 @@ class GameFrame(title: String) : JFrame(title) {
         // 添加键盘监听
         this.addKeyListener(manager)
         // 添加field运行监听
-        manager.addRunListener(object : Manager.RunListener {
+        manager.setRunListener(object : Manager.RunListener {
             override fun beforeRun() {
                 view.repaint()
             }

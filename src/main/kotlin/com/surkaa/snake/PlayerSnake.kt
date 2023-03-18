@@ -10,7 +10,7 @@ class PlayerSnake(
     tail: MutableList<Point> = mutableListOf(),
     headColor: Color = Color.BLACK,
     tailColor: Color = Color.GRAY
-) : SmartSnake(head, angle, tail, headColor, tailColor),
+) : DontHitWallSnake(head, angle, tail, headColor, tailColor),
     KeyListener,
     MouseListener,
     MouseMotionListener {

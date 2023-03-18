@@ -57,11 +57,15 @@ data class Point(
      * @return 与point的距离是否小于power * MOVE_DISTANCE
      */
     fun isNear(point: Point, powerForDistance: Double = 1.0): Boolean {
-        val dx2 = (point.x - x).pow(2)
-        val dy2 = (point.y - y).pow(2)
         // 加上1e-3防止计算误差
-        val distance = sqrt(dx2 + dy2) + 1e-3
+        val distance = getDistance(point) + 1e-3
         return distance < GAME_MOVE_DISTANCE * powerForDistance
+    }
+
+    fun getDistance(point: Point): Double {
+        val dx2 = (point.x - this.x).pow(2)
+        val dy2 = (point.y - this.y).pow(2)
+        return sqrt(dx2 + dy2)
     }
 
     override fun onDraw(g: Graphics) {
