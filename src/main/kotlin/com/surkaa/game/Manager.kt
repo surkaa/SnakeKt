@@ -1,6 +1,8 @@
 package com.surkaa.game
 
+import com.surkaa.snake.DontHitWallSnake
 import com.surkaa.snake.PlayerSnake
+import com.surkaa.snake.ToFoodSnake
 import com.surkaa.ui.Draw
 import java.awt.Graphics
 import java.awt.event.KeyEvent
@@ -142,8 +144,8 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
     //</editor-fold>
 
     override fun onDraw(g: Graphics) {
-        snakes.forEach { it.onDraw(g) }
         foods.forEach { it.onDraw(g) }
+        snakes.forEach { it.onDraw(g) }
     }
 
     fun defaultStart() {
@@ -163,6 +165,8 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
                 tail = tail
             )
         )
+        snakes.add(DontHitWallSnake(head = Point.random()))
+        snakes.add(ToFoodSnake(head = Point.random()))
         // 添加十个食物
         repeat(10) {
             foods.add(Food.random())
