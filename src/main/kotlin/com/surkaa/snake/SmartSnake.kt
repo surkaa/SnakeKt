@@ -20,6 +20,7 @@ open class SmartSnake(
         return null
     }
 
+    // 随便找一个方向直到这个方向不会撞到墙
     private fun random(): Double {
         val nextAngle = Random.nextDouble(0.0, 360.0)
         if (head.getTarget(nextAngle).isBroken())

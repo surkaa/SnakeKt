@@ -81,7 +81,18 @@ open class Snake(
                 eat()
             }
             // TODO 可以通过result.snake给被撞的蛇加分
-            is Result.HitOther, Result.HitSelf, Result.HitWall -> die()
+            is Result.HitOther -> {
+                println("die by ${result.snake::class.simpleName}")
+                die()
+            }
+            Result.HitSelf -> {
+                println("die by self")
+                die()
+            }
+            Result.HitWall -> {
+                println("die by wall")
+                die()
+            }
             Result.Move -> move()
         }
     }

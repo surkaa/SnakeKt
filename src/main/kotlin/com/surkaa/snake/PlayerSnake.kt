@@ -17,6 +17,9 @@ class PlayerSnake(
 
     private var nextAngle: Double? = null
 
+    /**
+     * 父类SmartSnake.turn的返回不为空的时候依照父类走
+     */
     override fun turn() = super.turn() ?: nextAngle
 
     /**
