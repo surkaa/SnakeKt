@@ -7,10 +7,10 @@ import java.awt.event.*
 class PlayerSnake(
     head: Point,
     angle: Double = 0.0,
-    tail: MutableList<Point> = mutableListOf(),
+    body: MutableList<Point> = mutableListOf(),
     headColor: Color = Color(0X326594),
-    tailColor: Color = Color(0X93D8F1)
-) : DontHitWallSnake(head, angle, tail, headColor, tailColor),
+    bodyColor: Color = Color(0X93D8F1)
+) : DontHitWallSnake(head, angle, body, headColor, bodyColor),
     KeyListener,
     MouseListener,
     MouseMotionListener {

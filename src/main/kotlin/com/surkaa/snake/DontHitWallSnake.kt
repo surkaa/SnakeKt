@@ -8,10 +8,10 @@ import kotlin.random.Random
 open class DontHitWallSnake(
     head: Point,
     angle: Double = 0.0,
-    tail: MutableList<Point> = mutableListOf(),
+    body: MutableList<Point> = mutableListOf(),
     headColor: Color = Color(0X582A16),
-    tailColor: Color = Color(0XB98458)
-) : Snake(head, angle, tail, headColor, tailColor) {
+    bodyColor: Color = Color(0XB98458)
+) : Snake(head, angle, body, headColor, bodyColor) {
 
     override fun turn(): Double? {
         if (nextTarget.isBroken()) {

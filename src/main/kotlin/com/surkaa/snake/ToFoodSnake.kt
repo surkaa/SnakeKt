@@ -7,10 +7,10 @@ import java.awt.Color
 class ToFoodSnake(
     head: Point,
     angle: Double = 0.0,
-    tail: MutableList<Point> = mutableListOf(),
+    body: MutableList<Point> = mutableListOf(),
     headColor: Color = Color(0X5868A1),
-    tailColor: Color = Color(0X737FB4)
-) : DontHitWallSnake(head, angle, tail, headColor, tailColor) {
+    bodyColor: Color = Color(0X737FB4)
+) : DontHitWallSnake(head, angle, body, headColor, bodyColor) {
 
     override fun turn() = super.turn() ?: head.getAngle(getFood.point)
 

@@ -12,10 +12,10 @@ open class Snake(
     var head: Point,
     // 蛇的方向
     private var angle: Double = 0.0,
-    // 蛇的尾巴 除了头 都是尾巴 tail 0 => ... => size-1 head
-    var tail: MutableList<Point> = mutableListOf(),
+    // 蛇的尾巴 除了头 都是尾巴 body 0 => ... => size-1 head
+    var body: MutableList<Point> = mutableListOf(),
     private val headColor: Color = Color(0XFBE816),
-    private val tailColor: Color = Color(0X55C762)
+    private val bodyColor: Color = Color(0X55C762)
 ) : Draw {
 
     // 是否存活 私有化setter
@@ -29,9 +29,9 @@ open class Snake(
      */
     private fun move() {
         val newHead: Point = nextTarget
-        tail.add(head)
+        body.add(head)
         head = newHead
-        tail.removeAt(0)
+        body.removeAt(0)
     }
 
     /**
@@ -39,14 +39,14 @@ open class Snake(
      */
     private fun eat() {
         val newHead: Point = head.getTarget(angle)
-        tail.add(head)
+        body.add(head)
         head = newHead
     }
 
     override fun onDraw(g: Graphics) {
         head.onDraw(g, color = headColor)
-        for (point in tail) {
-            point.onDraw(g, color = tailColor)
+        for (point in body) {
+            point.onDraw(g, color = bodyColor)
         }
     }
 
@@ -58,7 +58,7 @@ open class Snake(
     private fun isHitOther(other: Snake): Boolean {
         if (head.isNear(other.head))
             return true
-        other.tail.forEach {
+        other.body.forEach {
             if (it.isNear(head))
                 return true
         }
@@ -115,7 +115,7 @@ open class Snake(
         manager.let {
 
             // 根据canHitSelf检查是否撞到自身
-            if (!it.canHitSelf && tail.any(predicateSelf))
+            if (!it.canHitSelf && body.any(predicateSelf))
                 return Result.HitSelf
 
             // 检查是否撞到其他蛇
@@ -144,10 +144,10 @@ open class Snake(
 
         if (head != other.head) return false
         if (angle != other.angle) return false
-        if (tail != other.tail) return false
+        if (body != other.body) return false
         if (isAlive != other.isAlive) return false
         if (headColor != other.headColor) return false
-        if (tailColor != other.tailColor) return false
+        if (bodyColor != other.bodyColor) return false
 
         return true
     }
@@ -155,15 +155,15 @@ open class Snake(
     override fun hashCode(): Int {
         var result = head.hashCode()
         result = 31 * result + angle.hashCode()
-        result = 31 * result + tail.hashCode()
+        result = 31 * result + body.hashCode()
         result = 31 * result + isAlive.hashCode()
         result = 31 * result + headColor.hashCode()
-        result = 31 * result + tailColor.hashCode()
+        result = 31 * result + bodyColor.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "${tail.first()}==>${tail.size - 1}==>$head"
+        return "${body.first()}==>${body.size - 1}==>$head"
     }
     //</editor-fold>
 

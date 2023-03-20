@@ -154,16 +154,16 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
         val x: Double = Point.GAME_MAP_X / 4.0
         val y: Double = Point.GAME_MAP_Y / 4.0
         val dx: Double = Point.GAME_MOVE_DISTANCE
-        val tail = ArrayList<Point>()
+        val body = ArrayList<Point>()
         // 尾巴
         repeat(30) {
-            tail.add(0, Point(x - dx * it, y))
+            body.add(0, Point(x - dx * it, y))
         }
         snakes.add(
             PlayerSnake(
                 head = Point(x, y),
                 angle = 0.0,
-                tail = tail
+                body = body
             )
         )
         snakes.add(DontHitWallSnake(head = Point.random()))
