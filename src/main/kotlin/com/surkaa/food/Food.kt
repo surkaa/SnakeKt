@@ -31,6 +31,10 @@ sealed class Food(
         color = color
     )
 
+    override fun toString(): String {
+        return "Food$point"
+    }
+
     companion object {
         /**
          * 随机生成一个食物

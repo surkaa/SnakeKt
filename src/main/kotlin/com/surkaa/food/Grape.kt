@@ -6,4 +6,9 @@ import java.awt.Color
 // 葡萄
 class Grape(
     point: Point = Point.random()
-) : Food(point = point, value = 1, color = Color.GREEN)
+) : Food(point = point, value = 1, color = Color.GREEN) {
+
+    override fun toString(): String {
+        return "Grape$point"
+    }
+}
