@@ -1,6 +1,8 @@
 package com.surkaa.game
 
 import com.surkaa.ui.Draw
+import com.surkaa.util.fullString
+import mu.KotlinLogging
 import java.awt.Color
 import java.awt.Graphics
 
@@ -17,6 +19,10 @@ open class Snake(
     private val headColor: Color = Color(0XFBE816),
     private val bodyColor: Color = Color(0X55C762)
 ) : Draw {
+
+    private val snakeName = this::class.java.simpleName.fullString()
+
+    private val logger = KotlinLogging.logger {}
 
     // 是否存活 私有化setter
     var isAlive: Boolean = true
@@ -37,7 +43,7 @@ open class Snake(
      * 当下一个位置与食物足够靠进的时被调用
      */
     private fun eat() {
-        val newHead: Point = head.getTarget(angle)
+        val newHead: Point = nextTarget
         body.add(head)
         head = newHead
     }
@@ -75,26 +81,29 @@ open class Snake(
                 // TODO 开启多线程后可能造成ConcurrentModificationException
                 manager.onEat(result.food)
                 eat()
+                logger.warn { "$snakeName eat ${result.food}" }
             }
-            // TODO 可以通过result.snake给被撞的蛇加分
+
             is Result.HitOther -> {
-                println("die by ${result.snake::class.simpleName}")
+                // TODO 可以通过result.snake给被撞的蛇加分
                 die()
+                logger.warn { "$snakeName die by hit other ${result.snake.snakeName}" }
             }
 
             is Result.Move -> {
                 move(result.next)
+                logger.warn { "$snakeName move to ${result.next}" }
             }
 
             Result.HitSelf -> {
-                println("die by self")
                 die()
+                logger.warn { "$snakeName die by hit self" }
             }
+
             Result.HitWall -> {
-                println("die by wall")
                 die()
+                logger.warn { "$snakeName die by hit wall" }
             }
-            Result.Move -> move()
         }
     }
 
@@ -135,7 +144,7 @@ open class Snake(
                     return Result.Eat(food)
             }
         }
-        return Result.Move
+        return Result.Move(next)
     }
     //</editor-fold>
 
