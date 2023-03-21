@@ -1,7 +1,6 @@
-package com.surkaa.snake
+package com.surkaa.entities.snake
 
 import com.surkaa.game.Point
-import com.surkaa.game.Snake
 import java.awt.Color
 import kotlin.random.Random
 

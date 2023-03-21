@@ -1,6 +1,7 @@
 package com.surkaa.game
 
-import com.surkaa.food.Food
+import com.surkaa.entities.food.Food
+import com.surkaa.entities.snake.Snake
 
 /**
  * 用于判定蛇每走一步的结果, 并存储一些数据

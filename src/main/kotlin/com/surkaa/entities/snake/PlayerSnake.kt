@@ -1,4 +1,4 @@
-package com.surkaa.snake
+package com.surkaa.entities.snake
 
 import com.surkaa.game.Point
 import java.awt.Color

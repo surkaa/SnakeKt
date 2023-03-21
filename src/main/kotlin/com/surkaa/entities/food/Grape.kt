@@ -1,4 +1,4 @@
-package com.surkaa.food
+package com.surkaa.entities.food
 
 import com.surkaa.game.Point
 import java.awt.Color
