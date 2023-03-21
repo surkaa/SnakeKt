@@ -27,10 +27,9 @@ open class Snake(
     /**
      * 当下一个位置空旷时被调用
      */
-    private fun move() {
-        val newHead: Point = nextTarget
+    private fun move(next: Point) {
         body.add(head)
-        head = newHead
+        head = next
         body.removeAt(0)
     }
 
@@ -82,6 +81,11 @@ open class Snake(
                 println("die by ${result.snake::class.simpleName}")
                 die()
             }
+
+            is Result.Move -> {
+                move(result.next)
+            }
+
             Result.HitSelf -> {
                 println("die by self")
                 die()

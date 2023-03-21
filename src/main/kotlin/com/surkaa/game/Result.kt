@@ -8,9 +8,6 @@ import com.surkaa.food.Food
  */
 sealed class Result {
 
-    // 正常移动
-    object Move : Result()
-
     // 撞到自身
     object HitSelf : Result()
 
@@ -20,15 +17,18 @@ sealed class Result {
     // 吃食物
     data class Eat(val food: Food) : Result()
 
+    // 正常移动
+    data class Move(val next: Point) : Result()
+
     // 撞到其他蛇
     data class HitOther(val snake: Snake) : Result()
 
     override fun toString(): String {
         return when (this) {
-            is Move -> "Move"
             is HitSelf -> "HitSelf"
             is HitWall -> "HitWall"
             is Eat -> "Eat[food=$food]"
+            is Move -> "Move[next=$next]"
             is HitOther -> "HitOther[snake=$snake]"
         }
     }
