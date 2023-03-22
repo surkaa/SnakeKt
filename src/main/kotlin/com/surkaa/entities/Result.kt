@@ -1,4 +1,4 @@
-package com.surkaa.game
+package com.surkaa.entities
 
 import com.surkaa.entities.food.Food
 import com.surkaa.entities.snake.Snake

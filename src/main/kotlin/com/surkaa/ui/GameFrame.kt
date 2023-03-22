@@ -1,6 +1,6 @@
 package com.surkaa.ui
 
-import com.surkaa.game.Manager
+import com.surkaa.Manager
 import javax.swing.JFrame
 /**
  * @author kaa

@@ -1,7 +1,7 @@
 package com.surkaa.ui
 
-import com.surkaa.game.Manager
-import com.surkaa.game.Point
+import com.surkaa.Manager
+import com.surkaa.entities.Point
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics

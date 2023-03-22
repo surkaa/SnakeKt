@@ -1,4 +1,4 @@
-package com.surkaa.game
+package com.surkaa.entities
 
 import com.surkaa.ui.Draw
 import java.awt.Color

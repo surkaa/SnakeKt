@@ -1,6 +1,6 @@
 package com.surkaa.entities.food
 
-import com.surkaa.game.Point
+import com.surkaa.entities.Point
 import java.awt.Color
 
 // 香蕉

@@ -1,7 +1,7 @@
 package com.surkaa.entities.snake
 
-import com.surkaa.game.Manager
-import com.surkaa.game.Point
+import com.surkaa.Manager
+import com.surkaa.entities.Point
 import java.awt.Color
 
 class ToFoodSnake(

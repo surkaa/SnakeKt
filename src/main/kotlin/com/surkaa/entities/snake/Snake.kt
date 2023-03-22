@@ -1,8 +1,8 @@
 package com.surkaa.entities.snake
 
-import com.surkaa.game.Manager
-import com.surkaa.game.Point
-import com.surkaa.game.Result
+import com.surkaa.Manager
+import com.surkaa.entities.Point
+import com.surkaa.entities.Result
 import com.surkaa.ui.Draw
 import com.surkaa.util.fullString
 import mu.KotlinLogging
