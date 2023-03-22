@@ -1,6 +1,6 @@
 package com.surkaa.entities.snake
 
-import com.surkaa.Manager
+import com.surkaa.entities.Data
 import com.surkaa.entities.Point
 import java.awt.Color
 
@@ -14,7 +14,7 @@ class ToFoodSnake(
 
     override fun turn() = super.turn() ?: head.getAngle(getFood.point)
 
-    private val getFood get() = Manager.getInstance().foods.minBy {
+    private val getFood get() = Data.foods.minBy {
         head.getDistance(it.point)
     }
 

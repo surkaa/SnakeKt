@@ -1,8 +1,10 @@
 package com.surkaa.entities.snake
 
-import com.surkaa.Manager
+import com.surkaa.controller.GameController
+import com.surkaa.entities.Data
 import com.surkaa.entities.Point
 import com.surkaa.entities.Result
+import com.surkaa.entities.food.Food
 import com.surkaa.ui.Draw
 import com.surkaa.util.fullString
 import mu.KotlinLogging
@@ -45,7 +47,9 @@ open class Snake(
     /**
      * 当下一个位置与食物足够靠进的时被调用
      */
-    private fun eat() {
+    private fun eat(food: Food) {
+        Data.foods.remove(food)
+        Data.foods.add(Food.random())
         val newHead: Point = nextTarget
         body.add(head)
         head = newHead
@@ -78,12 +82,10 @@ open class Snake(
         turn()?.let {
             angle = it
         }
-        val manager = Manager.getInstance()
-        when (val result = getResult(manager)) {
+        when (val result = getResult()) {
             is Result.Eat -> {
                 // TODO 开启多线程后可能造成ConcurrentModificationException
-                manager.onEat(result.food)
-                eat()
+                eat(result.food)
                 logger.warn { "$snakeName eat ${result.food}" }
             }
 
@@ -118,7 +120,7 @@ open class Snake(
     /**
      * 获取Result
      */
-    private fun getResult(manager: Manager): Result {
+    private fun getResult(): Result {
         val next = nextTarget
 
         // 检查是否撞到边界
@@ -128,25 +130,23 @@ open class Snake(
         // 比较器
         val predicateSelf: (Point) -> Boolean = { p -> p.isNear(next) }
 
-        manager.let {
+        // 根据canHitSelf检查是否撞到自身
+        if (!GameController.canHitSelf && body.any(predicateSelf))
+            return Result.HitSelf
 
-            // 根据canHitSelf检查是否撞到自身
-            if (!it.canHitSelf && body.any(predicateSelf))
-                return Result.HitSelf
-
-            // 检查是否撞到其他蛇
-            it.snakes.forEach { other ->
-                // 排除自身
-                if (other != this@Snake && isHitOther(other))
-                    return Result.HitOther(other)
-            }
-
-            // 检查能否吃到食物
-            it.foods.forEach { food ->
-                if (food.isNear(next))
-                    return Result.Eat(food)
-            }
+        // 检查是否撞到其他蛇
+        Data.snakes.forEach { other ->
+            // 排除自身
+            if (other != this@Snake && isHitOther(other))
+                return Result.HitOther(other)
         }
+
+        // 检查能否吃到食物
+        Data.foods.forEach { food ->
+            if (food.isNear(next))
+                return Result.Eat(food)
+        }
+
         return Result.Move(next)
     }
     //</editor-fold>

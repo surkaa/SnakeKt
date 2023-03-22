@@ -18,7 +18,7 @@ class PlayerSnake(
     MouseMotionListener {
 
     init {
-        KeyController.setKeyListener(this)
+        KeyController.addKeyListener(this)
         MouseController.setMouseListener(this)
         MouseController.setMouseMotionListener(this)
     }

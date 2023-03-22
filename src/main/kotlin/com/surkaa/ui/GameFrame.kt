@@ -1,6 +1,6 @@
 package com.surkaa.ui
 
-import com.surkaa.Manager
+import com.surkaa.controller.GameController
 import com.surkaa.controller.KeyController
 import javax.swing.JFrame
 /**
@@ -8,7 +8,6 @@ import javax.swing.JFrame
  */
 class GameFrame(title: String) : JFrame(title) {
 
-    private val manager: Manager = Manager.getInstance()
     private val view: View = View()
 
     init {
@@ -27,17 +26,14 @@ class GameFrame(title: String) : JFrame(title) {
         // 添加键盘监听
         this.addKeyListener(KeyController)
         // 添加field运行监听
-        manager.setRunListener(object : Manager.RunListener {
-            override fun beforeRun() {
-                view.repaint()
-            }
+        GameController.setRunListener(object : GameController.RunListener {
+            override fun beforeRun() = view.repaint()
 
-            override fun afterRun() {
-            }
+            override fun afterRun() {}
         })
     }
 
     // 默认开局
-    fun defaultGame() = manager.defaultStart()
+    fun defaultGame() = GameController.defaultStart()
 
 }
