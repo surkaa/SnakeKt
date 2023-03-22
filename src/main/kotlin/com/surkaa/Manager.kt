@@ -12,9 +12,9 @@ import java.awt.Graphics
 class Manager private constructor() : Draw {
 
     // 游戏每帧的睡眠时间(ms)
-    val sleepTimeGeneral = 80L
-    val sleepTimeFast = 8L
-    val sleepTimeSlow = 160L
+    private val sleepTimeGeneral = 80L
+    private val sleepTimeFast = 8L
+    private val sleepTimeSlow = 160L
     var sleepTime: Long = sleepTimeGeneral
 
     // 是否处于暂停状态
@@ -45,6 +45,18 @@ class Manager private constructor() : Draw {
     //</editor-fold>
 
     //<editor-fold desc="Game Controller (暂停继续)">
+    fun toFast() {
+        sleepTime = sleepTimeFast
+    }
+
+    fun toSlow() {
+        sleepTime = sleepTimeSlow
+    }
+
+    fun toGeneral() {
+        sleepTime = sleepTimeGeneral
+    }
+
     // 开启游戏
     fun start() {
         isPause = false

@@ -19,14 +19,26 @@ object KeyController : KeyListener {
         // TODO 加速减速只能所有蛇都加速减速
         if (e == null) return
         when (e.keyCode) {
-            KeyEvent.VK_CONTROL, KeyEvent.VK_DOWN -> manager.sleepTime = manager.sleepTimeSlow
-            KeyEvent.VK_SHIFT, KeyEvent.VK_UP -> manager.sleepTime = manager.sleepTimeFast
+            KeyEvent.VK_CONTROL, KeyEvent.VK_DOWN -> {
+                manager.toSlow()
+            }
+
+            KeyEvent.VK_SHIFT, KeyEvent.VK_UP -> {
+                manager.toFast()
+            }
+
             KeyEvent.VK_SPACE -> {
                 if (manager.isPause) manager.start()
                 else manager.pause()
             }
-            KeyEvent.VK_ESCAPE -> exitProcess(0)
-            else -> keyListener?.keyPressed(e)
+
+            KeyEvent.VK_ESCAPE -> {
+                exitProcess(0)
+            }
+
+            else -> {
+                keyListener?.keyPressed(e)
+            }
         }
     }
 
@@ -39,11 +51,19 @@ object KeyController : KeyListener {
             KeyEvent.VK_SHIFT,
             KeyEvent.VK_CONTROL,
             KeyEvent.VK_UP,
-            KeyEvent.VK_DOWN -> manager.sleepTime = manager.sleepTimeGeneral
+            KeyEvent.VK_DOWN -> {
+                manager.toGeneral()
+            }
+
+            else -> {
+                keyListener?.keyReleased(e)
+            }
         }
     }
 
-    override fun keyTyped(e: KeyEvent?) {}
+    override fun keyTyped(e: KeyEvent?) {
+        keyListener?.keyTyped(e)
+    }
 
     fun setKeyListener(l: KeyListener?) {
         this.keyListener = l
