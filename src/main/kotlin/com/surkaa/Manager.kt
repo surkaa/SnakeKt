@@ -1,29 +1,28 @@
 package com.surkaa
 
+import com.surkaa.controller.KeyController
+import com.surkaa.entities.Point
 import com.surkaa.entities.food.Food
 import com.surkaa.entities.snake.DontHitWallSnake
 import com.surkaa.entities.snake.PlayerSnake
 import com.surkaa.entities.snake.Snake
 import com.surkaa.entities.snake.ToFoodSnake
-import com.surkaa.entities.Point
 import com.surkaa.ui.Draw
 import java.awt.Graphics
-import java.awt.event.KeyEvent
-import java.awt.event.KeyListener
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
-import kotlin.system.exitProcess
 
-class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
+class Manager private constructor() : Draw, MouseAdapter() {
 
     // 游戏每帧的睡眠时间(ms)
-    private val sleepTimeGeneral = 80L
-    private val sleepTimeFast = 8L
-    private val sleepTimeSlow = 160L
-    private var sleepTime: Long = sleepTimeGeneral
+    val sleepTimeGeneral = 80L
+    val sleepTimeFast = 8L
+    val sleepTimeSlow = 160L
+    var sleepTime: Long = sleepTimeGeneral
 
     // 是否处于暂停状态
-    private var isPause: Boolean = false
+    var isPause: Boolean = false
+
     // 能否撞到自身
     var canHitSelf: Boolean = true
 
@@ -93,42 +92,6 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
     //</editor-fold>
 
     //<editor-fold desc="KeyListener & MouseListener">
-    // TODO 加速减速只能所有蛇都加速减速
-    /**
-     * 监听键盘, 使游戏加速或减速
-     * esc结束程序
-     * space暂停或继续游戏
-     */
-    override fun keyPressed(e: KeyEvent?) {
-        if (e == null) return
-        when (e.keyCode) {
-            KeyEvent.VK_CONTROL, KeyEvent.VK_DOWN -> sleepTime = sleepTimeSlow
-            KeyEvent.VK_SHIFT, KeyEvent.VK_UP -> sleepTime = sleepTimeFast
-            KeyEvent.VK_SPACE -> {
-                if (isPause) start()
-                else pause()
-            }
-            KeyEvent.VK_ESCAPE -> exitProcess(0)
-            else -> mainSnake?.keyPressed(e)
-        }
-    }
-
-    /**
-     * 监听键盘, 恢复每帧睡眠时间
-     */
-    override fun keyReleased(e: KeyEvent?) {
-        if (e == null) return
-        when (e.keyCode) {
-            KeyEvent.VK_SHIFT,
-            KeyEvent.VK_CONTROL,
-            KeyEvent.VK_UP,
-            KeyEvent.VK_DOWN -> sleepTime = sleepTimeGeneral
-        }
-    }
-
-    override fun keyTyped(e: KeyEvent?) {
-    }
-
     /**
      * 监听鼠标 若只有一条蛇就将鼠标事件传递给这条蛇
      */
@@ -161,13 +124,10 @@ class Manager private constructor() : Draw, KeyListener, MouseAdapter() {
         repeat(30) {
             body.add(0, Point(x - dx * it, y))
         }
-        snakes.add(
-            PlayerSnake(
-                head = Point(x, y),
-                angle = 0.0,
-                body = body
-            )
-        )
+        PlayerSnake(head = Point(x, y), angle = 0.0, body = body).let {
+            snakes.add(it)
+            KeyController.setKeyListener(it)
+        }
         snakes.add(DontHitWallSnake(head = Point.random()))
         snakes.add(ToFoodSnake(head = Point.random()))
         // 添加十个食物

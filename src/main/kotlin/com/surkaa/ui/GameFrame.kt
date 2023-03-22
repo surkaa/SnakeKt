@@ -1,6 +1,7 @@
 package com.surkaa.ui
 
 import com.surkaa.Manager
+import com.surkaa.controller.KeyController
 import javax.swing.JFrame
 /**
  * @author kaa
@@ -24,7 +25,7 @@ class GameFrame(title: String) : JFrame(title) {
         // 窗口居中
         this.setLocationRelativeTo(null)
         // 添加键盘监听
-        this.addKeyListener(manager)
+        this.addKeyListener(KeyController)
         // 添加field运行监听
         manager.setRunListener(object : Manager.RunListener {
             override fun beforeRun() {
