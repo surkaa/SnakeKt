@@ -1,6 +1,7 @@
 package com.surkaa.ui
 
 import com.surkaa.Manager
+import com.surkaa.controller.MouseController
 import com.surkaa.entities.Point
 import java.awt.Color
 import java.awt.Dimension
@@ -16,8 +17,8 @@ class View : JPanel() {
 
     init {
         // 监听鼠标运动
-        addMouseListener(manager)
-        addMouseMotionListener(manager)
+        addMouseListener(MouseController)
+        addMouseMotionListener(MouseController)
     }
 
     // 绘画

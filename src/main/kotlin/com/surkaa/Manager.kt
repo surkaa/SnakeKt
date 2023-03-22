@@ -1,6 +1,5 @@
 package com.surkaa
 
-import com.surkaa.controller.KeyController
 import com.surkaa.entities.Point
 import com.surkaa.entities.food.Food
 import com.surkaa.entities.snake.DontHitWallSnake
@@ -9,10 +8,8 @@ import com.surkaa.entities.snake.Snake
 import com.surkaa.entities.snake.ToFoodSnake
 import com.surkaa.ui.Draw
 import java.awt.Graphics
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
 
-class Manager private constructor() : Draw, MouseAdapter() {
+class Manager private constructor() : Draw {
 
     // 游戏每帧的睡眠时间(ms)
     val sleepTimeGeneral = 80L
@@ -29,12 +26,6 @@ class Manager private constructor() : Draw, MouseAdapter() {
     // 存储所有蛇 食物
     val snakes: MutableList<Snake> = mutableListOf()
     val foods: MutableList<Food> = mutableListOf()
-
-    // 仅有一条蛇的时候将某些交互事件传递到此蛇
-    private val mainSnake : PlayerSnake?
-        get() = snakes.firstOrNull {
-            it is PlayerSnake
-        } as PlayerSnake?
 
     //<editor-fold desc="RunListener">
     // 储存监听器
@@ -91,24 +82,6 @@ class Manager private constructor() : Draw, MouseAdapter() {
     }
     //</editor-fold>
 
-    //<editor-fold desc="KeyListener & MouseListener">
-    /**
-     * 监听鼠标 若只有一条蛇就将鼠标事件传递给这条蛇
-     */
-    override fun mouseDragged(e: MouseEvent?) {
-        if (e == null) return
-        mainSnake?.mouseDragged(e)
-    }
-
-    /**
-     * 监听鼠标 若只有一条蛇就将鼠标事件传递给这条蛇
-     */
-    override fun mousePressed(e: MouseEvent?) {
-        if (e == null) return
-        mainSnake?.mousePressed(e)
-    }
-    //</editor-fold>
-
     override fun onDraw(g: Graphics) {
         foods.forEach { it.onDraw(g) }
         snakes.forEach { it.onDraw(g) }
@@ -124,10 +97,7 @@ class Manager private constructor() : Draw, MouseAdapter() {
         repeat(30) {
             body.add(0, Point(x - dx * it, y))
         }
-        PlayerSnake(head = Point(x, y), angle = 0.0, body = body).let {
-            snakes.add(it)
-            KeyController.setKeyListener(it)
-        }
+        snakes.add(PlayerSnake(head = Point(x, y), angle = 0.0, body = body))
         snakes.add(DontHitWallSnake(head = Point.random()))
         snakes.add(ToFoodSnake(head = Point.random()))
         // 添加十个食物

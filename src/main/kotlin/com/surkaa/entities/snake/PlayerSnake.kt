@@ -1,5 +1,7 @@
 package com.surkaa.entities.snake
 
+import com.surkaa.controller.KeyController
+import com.surkaa.controller.MouseController
 import com.surkaa.entities.Point
 import java.awt.Color
 import java.awt.event.*
@@ -14,6 +16,12 @@ class PlayerSnake(
     KeyListener,
     MouseListener,
     MouseMotionListener {
+
+    init {
+        KeyController.setKeyListener(this)
+        MouseController.setMouseListener(this)
+        MouseController.setMouseMotionListener(this)
+    }
 
     /**
      * 下一步的方向
